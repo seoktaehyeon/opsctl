@@ -13,9 +13,12 @@ def print_help_tool():
     print('\n'.join([
         '\nopsctl',
         '\t'.join([
-            '  yaml',
-            '|',
+            '  yaml   ',
             'Render templates to YAML'
+        ]),
+        '\t'.join([
+            '  version',
+            'Show opsctl version'
         ]),
     ]))
     exit(1)
@@ -97,6 +100,8 @@ def main():
             render_dir=cmd_args_items['OPSCTL_RENDER']
         )
         yaml_render.render_all()
+    elif tool_cmd == 'version':
+        print('opsctl v0.1.1')
     else:
         print_help_tool()
 
