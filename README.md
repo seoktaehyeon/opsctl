@@ -12,6 +12,12 @@
 pip install opsctl
 ```
 
+### Upgrade
+
+```bash
+pip install opsctl --upgrade
+```
+
 #### Usage
 
 - render yaml templates
