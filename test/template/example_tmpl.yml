@@ -1,0 +1,2 @@
+summary: This is {{ TOOL.NAME }}
+version: {{ TOOL.VERSION }}
