@@ -28,5 +28,6 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
         export OPSCTL_VER=$(echo "${{ github.ref }}" | awk -F '/' '{print $NF}' | awk -F 'v' '{print $NF}')
+        sed -i "s/{{OPSCTL_VER}}/$OPSCTL_VER/" opsctl/main.py
         python setup.py sdist bdist_wheel
         twine upload dist/*

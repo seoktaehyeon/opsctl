@@ -8,7 +8,7 @@ from jinja2 import Environment as jjEnvironment
 from jinja2 import FileSystemLoader as jjFileSystemLoader
 
 
-class YamlRender(object):
+class Render(object):
     def __init__(self, config_file, template_dir='template', render_dir='render'):
         with open(config_file, 'r', encoding='utf-8') as f:
             self.__config = yaml.full_load(f.read())
@@ -20,20 +20,9 @@ class YamlRender(object):
         if not os.path.exists(render_dir):
             os.makedirs(render_dir)
 
-    def __get_template_list(self):
-        """
-        找出模板目录中所有的 yaml/yml 文件
-        :return:
-        """
-        for item in self.__jjenv.list_templates():
-            if item.endswith('.yml') or item.endswith('.yaml'):
-                self.__templates.append(item)
-        # print(self.__templates)
-        return True
-
     def __render(self, template_file):
         """
-        渲染模板生成可部署的 YAML 文件
+        渲染模板生成文件
         :param template_file:
         :return:
         """
@@ -53,8 +42,7 @@ class YamlRender(object):
         渲染所有的模板
         :return:
         """
-        self.__get_template_list()
-        for tmpl in self.__templates:
+        for tmpl in self.__jjenv.list_templates():
             self.__render(tmpl)
         print('\nComplete all')
         return True
