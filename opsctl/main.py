@@ -57,17 +57,17 @@ def check_cmd_tmpl2art_opts(cmd_tmpl2art_opts):
     if not _items.get('OPSCTL_CONFIG'):
         print('--config is required')
         print_help_cmd_tmpl2art()
-    if not _items.get('OPSCTL_TEMPLATE'):
-        print('--template is required')
+    if not _items.get('OPSCTL_TMPLDIR'):
+        print('--tmpldir is required')
         print_help_cmd_tmpl2art()
-    if not _items.get('OPSCTL_RENDER'):
-        print('--render is required')
+    if not _items.get('OPSCTL_ARTDIR'):
+        print('--artdir is required')
         print_help_cmd_tmpl2art()
     if not os.path.isfile(_items['OPSCTL_CONFIG']):
         print('%s is not a valid file' % _items['OPSCTL_CONFIG'])
         print_help_cmd_tmpl2art()
-    if not os.path.isdir(_items['OPSCTL_TEMPLATE']):
-        print('%s is not a valid dir' % _items['OPSCTL_TEMPLATE'])
+    if not os.path.isdir(_items['OPSCTL_TMPLDIR']):
+        print('%s is not a valid dir' % _items['OPSCTL_TMPLDIR'])
         print_help_cmd_tmpl2art()
     return _items
 
@@ -87,19 +87,19 @@ def main():
                 shortopts='',
                 longopts=[
                     'config=',
-                    'template=',
-                    'render=',
+                    'tmpldir=',
+                    'artdir=',
                 ]
             )
             cmd_args_items = check_cmd_tmpl2art_opts(opts)
         except GetoptError:
             print_help_cmd_tmpl2art()
-        yaml_render = opsctlRender(
+        opsctl_render = opsctlRender(
             config_file=cmd_args_items['OPSCTL_CONFIG'],
-            template_dir=cmd_args_items['OPSCTL_TEMPLATE'],
-            render_dir=cmd_args_items['OPSCTL_RENDER']
+            template_dir=cmd_args_items['OPSCTL_TMPLDIR'],
+            render_dir=cmd_args_items['OPSCTL_ARTDIR']
         )
-        yaml_render.render_all()
+        opsctl_render.render_all()
     elif tool_cmd == 'version':
         print('opsctl v{{OPSCTL_VER}}')
     else:
