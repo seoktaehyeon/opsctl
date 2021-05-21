@@ -101,7 +101,7 @@ def main():
         )
         yaml_render.render_all()
     elif tool_cmd == 'version':
-        print('opsctl v{{OPSC_VERSION}}')
+        print('opsctl v{{OPSCTL_VER}}')
     else:
         print_help_tool()
 
