@@ -161,8 +161,9 @@ def output_env(output_type, output_path, input_path):
             input_file_content = f.read()
         input_content = dict()
         for input_file_line in input_file_content.split('\n'):
-            key, value = input_file_line.replace('=', ': ', 1).split(': ')
-            input_content[key] = value
+            if input_file_line:
+                key, value = input_file_line.replace('=', ': ', 1).split(': ')
+                input_content[key] = value
     else:
         input_content = dict(os.environ)
     if output_type == "json":
