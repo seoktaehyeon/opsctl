@@ -89,6 +89,14 @@ def print_help_cmd_env2json():
             '  --output',
             'Output Json file path'
         ]),
+        '\t'.join([
+            '  --input',
+            'Optional. Ensure your input file format that is must be same with output of command "env".'
+        ]),
+        '\t'.join([
+            '         ',
+            'Get current os environ variables if let this option empty.'
+        ]),
     ]))
     exit(1)
 
@@ -117,6 +125,14 @@ def print_help_cmd_env2yaml():
             '  --output',
             'Output YAML file path'
         ]),
+        '\t'.join([
+            '  --input',
+            'Optional. Ensure your input file format that is must be same with output of command "env".'
+        ]),
+        '\t'.join([
+            '         ',
+            'Get current os environ variables if let this option empty.'
+        ]),
     ]))
     exit(1)
 
@@ -138,12 +154,21 @@ def check_cmd_env2yaml_opts(cmd_env2yaml_opts):
     return _items
 
 
-def output_env(output_type, output_path):
+def output_env(output_type, output_path, input_path):
     output_content = ""
+    if input_path:
+        with open(input_path, 'r', encoding='utf-8') as f:
+            input_file_content = f.read()
+        input_items = list()
+        for input_file_line in input_file_content.split('\n'):
+            input_items.append(input_file_line.replace('=', ': ', 1))
+        input_content = '\n'.join(input_items)
+    else:
+        input_content = dict(os.environ)
     if output_type == "json":
-        output_content = json.dumps(dict(os.environ))
+        output_content = json.dumps(input_content)
     elif output_type == "yaml":
-        output_content = yaml.safe_dump(dict(os.environ))
+        output_content = yaml.safe_dump(input_content)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(output_content)
 
@@ -183,12 +208,17 @@ def main():
                 shortopts='',
                 longopts=[
                     'output=',
+                    'input=',
                 ]
             )
             cmd_args_items = check_cmd_env2json_opts(opts)
         except GetoptError:
             print_help_cmd_env2json()
-        output_env('json', cmd_args_items['OPSCTL_OUTPUT'])
+        output_env(
+            output_type='json',
+            output_path=cmd_args_items['OPSCTL_OUTPUT'],
+            input_path=cmd_args_items['OPSCTL_INPUT']
+        )
     elif tool_cmd == 'env2yaml':
         try:
             opts, args = getopt(
@@ -201,7 +231,11 @@ def main():
             cmd_args_items = check_cmd_env2yaml_opts(opts)
         except GetoptError:
             print_help_cmd_env2yaml()
-        output_env('yaml', cmd_args_items['OPSCTL_OUTPUT'])
+        output_env(
+            output_type='yaml',
+            output_path=cmd_args_items['OPSCTL_OUTPUT'],
+            input_path=cmd_args_items['OPSCTL_INPUT']
+        )
     elif tool_cmd == 'version':
         print('opsctl v{{OPSCTL_VER}}')
     else:
