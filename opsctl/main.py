@@ -217,7 +217,7 @@ def main():
         output_env(
             output_type='json',
             output_path=cmd_args_items['OPSCTL_OUTPUT'],
-            input_path=cmd_args_items['OPSCTL_INPUT']
+            input_path=cmd_args_items.get('OPSCTL_INPUT')
         )
     elif tool_cmd == 'env2yaml':
         try:
@@ -226,6 +226,7 @@ def main():
                 shortopts='',
                 longopts=[
                     'output=',
+                    'input=',
                 ]
             )
             cmd_args_items = check_cmd_env2yaml_opts(opts)
@@ -234,7 +235,7 @@ def main():
         output_env(
             output_type='yaml',
             output_path=cmd_args_items['OPSCTL_OUTPUT'],
-            input_path=cmd_args_items['OPSCTL_INPUT']
+            input_path=cmd_args_items.get('OPSCTL_INPUT')
         )
     elif tool_cmd == 'version':
         print('opsctl v{{OPSCTL_VER}}')
