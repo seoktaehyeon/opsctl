@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: v.stone@163.com
-
-
+import json
 from getopt import getopt, GetoptError
 import sys
 import os
+
+import yaml
+
 from opsctl.render import Render as opsctlRender
 
 
@@ -13,8 +15,16 @@ def print_help_tool():
     print('\n'.join([
         '\nopsctl',
         '\t'.join([
-            '  tmpl2art   ',
+            '  tmpl2art',
             'Render templates to articles'
+        ]),
+        '\t'.join([
+            '  env2json',
+            'Get environ variables to Json file'
+        ]),
+        '\t'.join([
+            '  env2yaml',
+            'Get environ variables to YAML file'
         ]),
         '\t'.join([
             '  version',
@@ -72,6 +82,72 @@ def check_cmd_tmpl2art_opts(cmd_tmpl2art_opts):
     return _items
 
 
+def print_help_cmd_env2json():
+    print('\n'.join([
+        '\nopsctl env2json',
+        '\t'.join([
+            '  --output',
+            'Output Json file path'
+        ]),
+    ]))
+    exit(1)
+
+
+def check_cmd_env2json_opts(cmd_env2json_opts):
+    """
+    output is required
+    :param cmd_env2json_opts:
+    :return:
+    """
+    _items = dict()
+    for k, v in cmd_env2json_opts:
+        _items['OPSCTL_%s' % k.replace('--', '').upper()] = v
+    if len(_items) == 0:
+        print_help_cmd_env2json()
+    if not _items.get('OPSCTL_OUTPUT'):
+        print('--output is required')
+        print_help_cmd_env2json()
+    return _items
+
+
+def print_help_cmd_env2yaml():
+    print('\n'.join([
+        '\nopsctl env2yaml',
+        '\t'.join([
+            '  --output',
+            'Output YAML file path'
+        ]),
+    ]))
+    exit(1)
+
+
+def check_cmd_env2yaml_opts(cmd_env2yaml_opts):
+    """
+    output is required
+    :param cmd_env2yaml_opts:
+    :return:
+    """
+    _items = dict()
+    for k, v in cmd_env2yaml_opts:
+        _items['OPSCTL_%s' % k.replace('--', '').upper()] = v
+    if len(_items) == 0:
+        print_help_cmd_env2yaml()
+    if not _items.get('OPSCTL_OUTPUT'):
+        print('--output is required')
+        print_help_cmd_env2yaml()
+    return _items
+
+
+def output_env(output_type, output_path):
+    output_content = ""
+    if output_type == "json":
+        output_content = json.dumps(dict(os.environ))
+    elif output_type == "yaml":
+        output_content = yaml.safe_dump(dict(os.environ))
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write(output_content)
+
+
 def main():
     try:
         tool_cmd = sys.argv[1]
@@ -100,6 +176,32 @@ def main():
             render_dir=cmd_args_items['OPSCTL_ARTDIR']
         )
         opsctl_render.render_all()
+    elif tool_cmd == 'env2json':
+        try:
+            opts, args = getopt(
+                args=cmd_args,
+                shortopts='',
+                longopts=[
+                    'output=',
+                ]
+            )
+            cmd_args_items = check_cmd_env2json_opts(opts)
+        except GetoptError:
+            print_help_cmd_env2json()
+        output_env('json', cmd_args_items['OPSCTL_OUTPUT'])
+    elif tool_cmd == 'env2yaml':
+        try:
+            opts, args = getopt(
+                args=cmd_args,
+                shortopts='',
+                longopts=[
+                    'output=',
+                ]
+            )
+            cmd_args_items = check_cmd_env2yaml_opts(opts)
+        except GetoptError:
+            print_help_cmd_env2yaml()
+        output_env('yaml', cmd_args_items['OPSCTL_OUTPUT'])
     elif tool_cmd == 'version':
         print('opsctl v{{OPSCTL_VER}}')
     else:
