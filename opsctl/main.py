@@ -159,10 +159,10 @@ def output_env(output_type, output_path, input_path):
     if input_path:
         with open(input_path, 'r', encoding='utf-8') as f:
             input_file_content = f.read()
-        input_items = list()
+        input_content = dict()
         for input_file_line in input_file_content.split('\n'):
-            input_items.append(input_file_line.replace('=', ': ', 1))
-        input_content = '\n'.join(input_items)
+            key, value = input_file_line.replace('=', ': ', 1).split(': ')
+            input_content[key] = value
     else:
         input_content = dict(os.environ)
     if output_type == "json":
