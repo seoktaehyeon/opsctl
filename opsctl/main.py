@@ -126,6 +126,12 @@ def check_cmd_env2json_opts(cmd_env2json_opts):
     if not _items.get('OPSCTL_OUTPUT'):
         print('--output is required')
         print_help_cmd_env2json()
+    if os.path.dirname(_items['OPSCTL_OUTPUT']) and not os.path.exists(os.path.dirname(_items['OPSCTL_OUTPUT'])):
+        print('%s is not a valid path' % _items['OPSCTL_OUTPUT'])
+        print_help_cmd_env2json()
+    if _items.get('OPSCTL_INPUT') and not os.path.isfile(_items['OPSCTL_INPUT']):
+        print('%s is not a valid path' % _items['OPSCTL_INPUT'])
+        print_help_cmd_env2json()
     return _items
 
 
@@ -161,6 +167,12 @@ def check_cmd_env2yaml_opts(cmd_env2yaml_opts):
         print_help_cmd_env2yaml()
     if not _items.get('OPSCTL_OUTPUT'):
         print('--output is required')
+        print_help_cmd_env2yaml()
+    if os.path.dirname(_items['OPSCTL_OUTPUT']) and not os.path.exists(os.path.dirname(_items['OPSCTL_OUTPUT'])):
+        print('%s is not a valid path' % _items['OPSCTL_OUTPUT'])
+        print_help_cmd_env2yaml()
+    if _items.get('OPSCTL_INPUT') and not os.path.isfile(_items['OPSCTL_INPUT']):
+        print('%s is not a valid path' % _items['OPSCTL_INPUT'])
         print_help_cmd_env2yaml()
     return _items
 
