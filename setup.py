@@ -9,7 +9,7 @@ import os
 
 URL = 'https://github.com/seoktaehyeon/opsctl'
 NAME = 'opsctl'
-VERSION = os.getenv('OPSCTL_VER')
+VERSION = os.getenv('OPSCTL_VER') if os.getenv('OPSCTL_VER') else '0.0.1'
 DESCRIPTION = 'OPS CTL Tool'
 if os.path.exists('README.md'):
     with open('README.md', encoding='utf-8') as f:

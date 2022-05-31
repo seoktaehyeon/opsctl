@@ -35,8 +35,8 @@ opsctl
 Usage:
 opsctl tmpl2art
   --config	Key-Value config file path, file type is YAML
-  --tmpldir	Template root path
-  --artdir	Articles output path
+  --tmpl	Template dir path or template file path
+  --output	Articles output path
 ```
 
 - get env and output to a json file

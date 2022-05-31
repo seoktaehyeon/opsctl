@@ -42,11 +42,11 @@ def print_help_cmd_tmpl2art():
             'Key-Value config file path, file type is YAML'
         ]),
         '\t'.join([
-            '  --tmpldir',
-            'Template root path'
+            '  --tmpl',
+            'Template dir path or template file path'
         ]),
         '\t'.join([
-            '  --artdir',
+            '  --output',
             'Articles output path'
         ]),
     ]))
@@ -55,7 +55,7 @@ def print_help_cmd_tmpl2art():
 
 def check_cmd_tmpl2art_opts(cmd_tmpl2art_opts):
     """
-    config, template, render are required
+    config, template, output is required
     :param cmd_tmpl2art_opts:
     :return:
     """
@@ -67,18 +67,29 @@ def check_cmd_tmpl2art_opts(cmd_tmpl2art_opts):
     if not _items.get('OPSCTL_CONFIG'):
         print('--config is required')
         print_help_cmd_tmpl2art()
-    if not _items.get('OPSCTL_TMPLDIR'):
-        print('--tmpldir is required')
+    if not _items.get('OPSCTL_TMPL'):
+        print('--tmpl is required')
         print_help_cmd_tmpl2art()
-    if not _items.get('OPSCTL_ARTDIR'):
-        print('--artdir is required')
+    if not _items.get('OPSCTL_OUTPUT'):
+        print('--output is required')
         print_help_cmd_tmpl2art()
     if not os.path.isfile(_items['OPSCTL_CONFIG']):
         print('%s is not a valid file' % _items['OPSCTL_CONFIG'])
         print_help_cmd_tmpl2art()
-    if not os.path.isdir(_items['OPSCTL_TMPLDIR']):
-        print('%s is not a valid dir' % _items['OPSCTL_TMPLDIR'])
+    if os.path.isdir(_items['OPSCTL_TMPL']):
+        if not os.path.isdir(_items['OPSCTL_OUTPUT']):
+            print('%s is not a valid path' % _items['OPSCTL_OUTPUT'])
+            print_help_cmd_tmpl2art()
+    elif os.path.isfile(_items['OPSCTL_TMPL']):
+        if os.path.isfile(_items['OPSCTL_OUTPUT']):
+            print('%s is existing' % _items['OPSCTL_OUTPUT'])
+            print_help_cmd_tmpl2art()
+        elif os.path.isdir(_items['OPSCTL_OUTPUT']):
+            _items['OPSCTL_OUTPUT'] = os.path.join(_items['OPSCTL_OUTPUT'], os.path.basename(_items['OPSCTL_TMPL']))
+    else:
+        print('%s is not a valid path' % _items['OPSCTL_TMPL'])
         print_help_cmd_tmpl2art()
+
     return _items
 
 
@@ -172,6 +183,7 @@ def output_env(output_type, output_path, input_path):
         output_content = yaml.safe_dump(input_content)
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(output_content)
+    print('\tSucceed to generate %s' % output_path)
 
 
 def main():
@@ -189,8 +201,8 @@ def main():
                 shortopts='',
                 longopts=[
                     'config=',
-                    'tmpldir=',
-                    'artdir=',
+                    'tmpl=',
+                    'output=',
                 ]
             )
             cmd_args_items = check_cmd_tmpl2art_opts(opts)
@@ -198,10 +210,13 @@ def main():
             print_help_cmd_tmpl2art()
         opsctl_render = opsctlRender(
             config_file=cmd_args_items['OPSCTL_CONFIG'],
-            template_dir=cmd_args_items['OPSCTL_TMPLDIR'],
-            render_dir=cmd_args_items['OPSCTL_ARTDIR']
+            template_path=cmd_args_items['OPSCTL_TMPL'],
+            output_path=cmd_args_items['OPSCTL_OUTPUT']
         )
-        opsctl_render.render_all()
+        if os.path.isfile(cmd_args_items['OPSCTL_TMPL']):
+            opsctl_render.render_file()
+        else:
+            opsctl_render.render_all()
     elif tool_cmd == 'env2json':
         try:
             opts, args = getopt(
@@ -239,7 +254,7 @@ def main():
             input_path=cmd_args_items.get('OPSCTL_INPUT')
         )
     elif tool_cmd == 'version':
-        print('opsctl v{{OPSCTL_VER}}')
+        print('opsctl v0.0.1')
     else:
         print_help_tool()
 
