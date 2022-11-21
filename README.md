@@ -18,6 +18,14 @@ pip install opsctl
 pip install opsctl --upgrade
 ```
 
+### Test
+
+```bash
+python setup.py install
+cd test
+pytest *
+```
+
 #### Feature
 
 ```bash
