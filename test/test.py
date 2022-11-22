@@ -32,6 +32,7 @@ def test_case_1():
     assert 'tmpl2art' in output
     assert 'env2json' in output
     assert 'env2yaml' in output
+    assert 'bamboo' in output
 
     status_code, output = shell_cmd('opsctl version')
     assert status_code == 0

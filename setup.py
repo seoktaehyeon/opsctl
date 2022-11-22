@@ -24,6 +24,7 @@ PLATFORMS = [
 ]
 REQUIRES = [
     'PyYAML',
+    'requests',
     'jinja2',
 ]
 CONSOLE_SCRIPTS = 'opsctl=opsctl.main:main'
