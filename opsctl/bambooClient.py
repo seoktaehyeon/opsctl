@@ -10,6 +10,7 @@ from pprint import pprint
 class Bamboo(object):
     def __init__(self, host, token):
         self.__session = requests.session()
+        self.__session.verify = False
         self.__base_url = host
         self.__headers = {
             "Authorization": "Bearer %s" % token,
