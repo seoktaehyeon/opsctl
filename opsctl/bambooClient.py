@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 # Author: v.stone@163.com
 
-import os
+# import os
 import requests
-from pprint import pprint
+# from pprint import pprint
 
 
 class Bamboo(object):
     def __init__(self, host, token):
+        requests.packages.urllib3.disable_warnings()
         self.__session = requests.session()
         self.__session.verify = False
         self.__base_url = host
