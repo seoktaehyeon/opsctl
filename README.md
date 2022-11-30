@@ -29,8 +29,7 @@ pytest *
 
 ### Feature
 
-```text
-
+```text 
 opsctl
   tmpl2art	Render templates to articles
   env2json	Get environ variables to Json file
@@ -41,8 +40,7 @@ opsctl
 
 - 	Render templates to articles
 
-```text
-
+```text 
 opsctl tmpl2art
   --config	Key-Value config file path, file type is YAML
   --tmpl	Template dir path or template file path
@@ -51,8 +49,7 @@ opsctl tmpl2art
 
 - 	Get environ variables to Json file
 
-```text
-
+```text 
 opsctl env2json
   --output	Output Json file path
   --input	Optional. Ensure your input file format that is must be same with output of command "env".
@@ -61,8 +58,7 @@ opsctl env2json
 
 - 	Get environ variables to YAML file
 
-```text
-
+```text 
 opsctl env2yaml
   --output	Output YAML file path
   --input	Optional. Ensure your input file format that is must be same with output of command "env".
@@ -71,8 +67,7 @@ opsctl env2yaml
 
 - 	Bamboo CLI
 
-```text
-
+```text 
 opsctl bamboo
   --host	Bamboo server host base url
   --token	Bamboo server access token

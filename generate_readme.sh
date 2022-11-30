@@ -41,8 +41,7 @@ output_feature=$(opsctl)
 cat <<EOF_FEATURE >> README.md
 ### Feature
 
-\`\`\`text
-$output_feature
+\`\`\`text $output_feature
 \`\`\`
 
 EOF_FEATURE
@@ -61,8 +60,7 @@ do
     cat << EOF >> README.md
 - $(echo "$output_feature" | grep "^  $cmd" | awk -F "^  $cmd" '{print $NF}')
 
-\`\`\`text
-$(opsctl $cmd)
+\`\`\`text $(opsctl $cmd)
 \`\`\`
 
 EOF
